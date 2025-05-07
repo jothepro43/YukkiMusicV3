@@ -11,12 +11,10 @@ async def main():
 
     # 2) Create an in-memory client (no .session file)
     app = Client(
-        name=":memory:",              # in-memory storage
+        ":memory:",    #Positional Session Name
         api_id=api_id,
         api_hash=api_hash,
-        workdir=".",                  # keep working dir at repo root
-        in_memory=True                # ensure no file is written
-    )
+        in_memory=True    #Keep Session only in RAM
 
     # 3) Connect only (no ping)
     await app.connect()

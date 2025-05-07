@@ -15,7 +15,7 @@ async def main():
         api_id=api_id,
         api_hash=api_hash,
         in_memory=True    #Keep Session only in RAM
-
+    )
     # 3) Connect only (no ping)
     await app.connect()
 

@@ -1,30 +1,52 @@
-#
-# Copyright (C) 2021-2022 by TeamYukki@Github, < https://github.com/TeamYukki >.
-#
-# This file is part of < https://github.com/TeamYukki/YukkiMusicBot > project,
-# and is released under the "GNU v3.0 License Agreement".
-# Please see < https://github.com/TeamYukki/YukkiMusicBot/blob/master/LICENSE >
-#
-# All rights reserved.
-
-
+# genstring.py
 import asyncio
-
-from pyrogram import Client as c
-
-API_ID = input("\nEnter Your API_ID:\n > ")
-API_HASH = input("\nEnter Your API_HASH:\n > ")
-
-print("\n\n Enter Phone number when asked.\n\n")
-
-i = c(":memory:", api_id=API_ID, api_hash=API_HASH)
-
+from getpass import getpass
+from pyrogram import Client
 
 async def main():
-    await i.start()
-    ss = await i.export_session_string()
-    print("\nHERE IS YOUR STRING SESSION, COPY IT, DON'T SHARE!!\n")
-    print(f"\n{ss}\n")
+    # 1) Prompt for your credentials
+    api_id   = int(input("Enter your API_ID: ").strip())
+    api_hash = input("Enter your API_HASH: ").strip()
+    phone    = input("Enter your phone number (+<country><number>): ").strip()
 
+    # 2) Create an in-memory client (no .session file)
+    app = Client(
+        name=":memory:",              # in-memory storage
+        api_id=api_id,
+        api_hash=api_hash,
+        workdir=".",                  # keep working dir at repo root
+        in_memory=True                # ensure no file is written
+    )
 
-asyncio.run(main())
+    # 3) Connect only (no ping)
+    await app.connect()
+
+    # 4) Send and receive the login code
+    code   = await app.send_code(phone)
+    otp    = input("Enter the login code you received: ").strip()
+
+    # 5) Complete authorization; handle 2FA if required
+    try:
+        await app.sign_in(
+            phone_number=phone,
+            phone_code=otp,
+            phone_code_hash=code.phone_code_hash
+        )
+    except Exception as e:
+        if "SESSION_PASSWORD_NEEDED" in str(e):
+            pw = getpass("Two-step enabled. Enter your password: ")
+            await app.check_password(password=pw)
+        else:
+            raise
+
+    # 6) Export and display the session string
+    session = await app.export_session_string()
+    print("\n=== YOUR NEW SESSION STRING ===\n")
+    print(session)
+    print("\nCopy this entire string into your SESSION_STRING Config Var.\n")
+
+    # 7) Cleanly disconnect
+    await app.disconnect()
+
+if __name__ == "__main__":
+    asyncio.run(main())

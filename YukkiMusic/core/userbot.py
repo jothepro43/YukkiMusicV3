@@ -13,7 +13,7 @@ from pyrogram import Client
 
 import config
 
-from config import ASSISTANT_NAME          # ← add this line
+from config import MUSIC_BOT_NAME     # ← add this line
 
 from ..logging import LOGGER
 
@@ -24,7 +24,7 @@ assistantids = []
 class Userbot(Client):
     def __init__(self):
         self.one = Client(
-            name=ASSISTANT_NAME,          # new keyword (Pyrogram v2)
+            name=MUSIC_BOT_NAME,           # new keyword (Pyrogram v2)
             api_id=API_ID,
             api_hash=API_HASH,
             session_string=STRING_SESSION,

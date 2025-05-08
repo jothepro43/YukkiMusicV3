@@ -13,7 +13,16 @@ from pyrogram import Client
 
 import config
 
-from config import API_ID, API_HASH, STRING_SESSION, MUSIC_BOT_NAME   # ← add this line
+from config import (
+    API_ID,
+    API_HASH,
+    MUSIC_BOT_NAME,
+    STRING1,    # ← primary session (env: STRING_SESSION)
+    STRING2,
+    STRING3,
+    STRING4,
+    STRING5,
+)
 
 from ..logging import LOGGER
 
@@ -23,42 +32,55 @@ assistantids = []
 
 class Userbot(Client):
     def __init__(self):
-        self.one = Client(
-            name=MUSIC_BOT_NAME,           # new keyword (Pyrogram v2)
-            api_id=API_ID,
+        if STRING1:
+            self.one = Client(
+                name=f"{MUSIC_BOT_NAME}_1",            # unique v2 “name”
+                api_id=API_ID,
+                api_hash=API_HASH,
+                session_string=StringSession(STRING1),  # NEW: in-memory string session
+                workers=8,
+                plugins={"root": "YukkiMusic.plugins"},
+            )
+        # -- Secondary ASSISTANTS 
+        if STRING2:
+            self.two = Client(
+                name=f"{MUSIC_BOT_NAME}_2",
+                api_id=API_ID,
+                api_hash=API_HASH,
+                session_string=StringSession(STRING2),
+                workers=8,
+                no_updates=True,
+        )
+        if STRING3:
+            self.three = Client(
+                name=f"{MUSIC_BOT_NAME}_3",
+                api_id=API_ID,
+                api_hash=API_HASH,
+                session_string=StringSession(STRING3),
+                workers=8,
+                no_updates=True,
+        )
+        if STRING4:
+            name=f"{MUSIC_BOT_NAME}_4",
+                api_id=API_ID,
             api_hash=API_HASH,
-            session_string=STRING_SESSION,
+            session_string=StringSession(STRING4),
             workers=8,
-            plugins={"root": "YukkiMusic.plugins"},
-        )
-        self.two = Client(
-            api_id=config.API_ID,
-            api_hash=config.API_HASH,
-            session_name=str(config.STRING2),
             no_updates=True,
-        )
-        self.three = Client(
-            api_id=config.API_ID,
-            api_hash=config.API_HASH,
-            session_name=str(config.STRING3),
-            no_updates=True,
-        )
-        self.four = Client(
-            api_id=config.API_ID,
-            api_hash=config.API_HASH,
-            session_name=str(config.STRING4),
-            no_updates=True,
-        )
-        self.five = Client(
-            api_id=config.API_ID,
-            api_hash=config.API_HASH,
-            session_name=str(config.STRING5),
-            no_updates=True,
+        ) 
+        if STRING5:
+            self.five = Client(
+                name=f"{MUSIC_BOT_NAME}_5",
+                api_id=API_ID,
+                api_hash=API_HASH,
+                session_string=StringSession(STRING5),
+                workers=8,
+                no_updates=True,
         )
 
     async def start(self):
         LOGGER(__name__).info(f"Starting Assistant Clients")
-        if config.STRING1:
+        if STRING1:
             await self.one.start()
             try:
                 await self.one.join_chat("Lunatic0de")
@@ -88,7 +110,7 @@ class Userbot(Client):
             LOGGER(__name__).info(
                 f"Assistant Started as {self.one.name}"
             )
-        if config.STRING2:
+        if STRING2:
             await self.two.start()
             try:
                 await self.one.join_chat("Lunatic0de")
@@ -118,7 +140,7 @@ class Userbot(Client):
             LOGGER(__name__).info(
                 f"Assistant Two Started as {self.two.name}"
             )
-        if config.STRING3:
+        if STRING3:
             await self.three.start()
             try:
                 await self.one.join_chat("Lunatic0de")
@@ -148,7 +170,7 @@ class Userbot(Client):
             LOGGER(__name__).info(
                 f"Assistant Three Started as {self.three.name}"
             )
-        if config.STRING4:
+        if STRING4:
             await self.four.start()
             try:
                 await self.one.join_chat("Lunatic0de")
@@ -178,7 +200,7 @@ class Userbot(Client):
             LOGGER(__name__).info(
                 f"Assistant Four Started as {self.four.name}"
             )
-        if config.STRING5:
+        if STRING5:
             await self.five.start()
             try:
                 await self.one.join_chat("Lunatic0de")

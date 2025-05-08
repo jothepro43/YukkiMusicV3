@@ -13,7 +13,7 @@ from pyrogram import Client
 
 import config
 
-from config import MUSIC_BOT_NAME     # ← add this line
+from config import API_ID, API_HASH, STRING_SESSION, MUSIC_BOT_NAME   # ← add this line
 
 from ..logging import LOGGER
 

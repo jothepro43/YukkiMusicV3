@@ -10,7 +10,7 @@
 import sys
 
 from pyrogram import Client
-from pyrogram.session import StringSession
+from pyrogram import StringSession
 
 import config
 

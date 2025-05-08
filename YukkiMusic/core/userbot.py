@@ -30,18 +30,20 @@ assistants = []
 assistantids = []
 
 
-class Userbot(Client):
+class Userbot:
     def __init__(self):
+        # — PRIMARY ASSISTANT (voice-chat capable) —
         if STRING1:
             self.one = Client(
-                name=f"{MUSIC_BOT_NAME}_1",            # unique v2 “name”
+                name=f"{MUSIC_BOT_NAME}_1",
                 api_id=API_ID,
                 api_hash=API_HASH,
-                session_string=StringSession(STRING1),  # NEW: in-memory string session
+                session_string=StringSession(STRING1),
                 workers=8,
                 plugins={"root": "YukkiMusic.plugins"},
             )
-        # -- Secondary ASSISTANTS 
+
+        # — SECONDARY ASSISTANT (no_updates=True) —
         if STRING2:
             self.two = Client(
                 name=f"{MUSIC_BOT_NAME}_2",
@@ -50,7 +52,10 @@ class Userbot(Client):
                 session_string=StringSession(STRING2),
                 workers=8,
                 no_updates=True,
-        )
+            )
+
+        # …repeat for STRING3, STRING4, STRING5 similarly…
+        
         if STRING3:
             self.three = Client(
                 name=f"{MUSIC_BOT_NAME}_3",
@@ -59,15 +64,16 @@ class Userbot(Client):
                 session_string=StringSession(STRING3),
                 workers=8,
                 no_updates=True,
-        )
+            )
         if STRING4:
-            name=f"{MUSIC_BOT_NAME}_4",
+            self.four = Client(
+                name=f"{MUSIC_BOT_NAME}_4",
                 api_id=API_ID,
-            api_hash=API_HASH,
-            session_string=StringSession(STRING4),
-            workers=8,
-            no_updates=True,
-        ) 
+                api_hash=API_HASH,
+                session_string=StringSession(STRING4),
+                workers=8,
+                no_updates=True,
+            ) 
         if STRING5:
             self.five = Client(
                 name=f"{MUSIC_BOT_NAME}_5",
@@ -76,7 +82,7 @@ class Userbot(Client):
                 session_string=StringSession(STRING5),
                 workers=8,
                 no_updates=True,
-        )
+            )
 
     async def start(self):
         LOGGER(__name__).info(f"Starting Assistant Clients")

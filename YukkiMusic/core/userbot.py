@@ -13,6 +13,8 @@ from pyrogram import Client
 
 import config
 
+from config import ASSISTANT_NAME          # ← add this line
+
 from ..logging import LOGGER
 
 assistants = []

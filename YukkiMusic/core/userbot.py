@@ -22,10 +22,12 @@ assistantids = []
 class Userbot(Client):
     def __init__(self):
         self.one = Client(
-            api_id=config.API_ID,
-            api_hash=config.API_HASH,
-            session_name=str(config.STRING1),
-            no_updates=True,
+            name=ASSISTANT_NAME,          # new keyword (Pyrogram v2)
+            api_id=API_ID,
+            api_hash=API_HASH,
+            session_string=STRING_SESSION,
+            workers=8,
+            plugins={"root": "YukkiMusic.plugins"},
         )
         self.two = Client(
             api_id=config.API_ID,
